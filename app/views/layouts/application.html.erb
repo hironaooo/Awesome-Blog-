@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AwesomeBlog</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <!-- partials or partial file -->
+    <%= render 'layouts/header' %>
+    <%= render 'shared/flash_messages' %>
+    <div class="container p-3">
+    <%= yield %>
+    </div>
+
+    <%= debug session[:user_id] if Rails.env == 'development' %> <!-- if文を一行にした書き方　 現在のユーザーのidを表示する。　-->
+    <%= render 'layouts/footer' %>
+  </body>
+</html>

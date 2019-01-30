@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <%= gravatar_for current_user %>
+
+                <h1><%= current_user.name %></h1>
+                <%= current_user.email %>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <%= form_for @post do |f| %>
+                    <%= render 'shared/error_messages', object: f.object %>
+                    <div class="form-group">
+                        <%= hidden_field_tag :user_id, current_user.id %>
+                        <%= f.text_area :content, class: 'form-control', 
+                                            placeholder: 'Share your thoughts...' %>
+                        <!--下のは <input type="field" name="picture"> の意味--> 
+                        <%=  :picture, accept: 'image/jpeg, image/gif, image/png'%>
+                    </div>
+                    <div class="form-group">
+                        <%= f.submit "Post", class: 'btn btn-primary' %>
+                    </div>
+                <% end %>
+            </div>
+            <div class="card-body">
+                <% if @posts.any? %>
+                    <ul class="list-unstyled">
+                        <% @posts.each do |post| %>
+                            <li class="media mb-4">
+                                <div class="mr-2">
+                                    <%= link_to gravatar_for(post.user), post.user %>
+                                </div>
+                                <div class="media-body">
+                                    <h5><%= link_to post.user.name, post.user %></h5>
+                                    <div><%= post.content %></div>
+                                    <div><%= image_tag post.picture.url if post.picture? %></div>
+                                    <small class="text-muted">Postd <%= time_ago_in_words(post.created_at) %> ago</small>
+                                </div>
+                            </li>
+                        <% end %>
+                    </ul>
+                    <div class="text-center border-top pt-3">
+                        <%= will_paginate @posts %>
+                    </div>
+                <% else %>
+                    <div class="text-muted">Nothing to show.</div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

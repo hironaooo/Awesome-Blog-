@@ -1,0 +1,27 @@
+<h1 class="text-center border-bottom p-4 mb-3">Users</h1>
+
+
+<div class="row">
+    <% @users.each do |user| %>
+        <div class="col-lg-6">
+            <div class="media mb-3">
+                <div class="align-self-center mr-3 border">
+                    <%= link_to gravatar_for(user), user %>
+                </div>
+                <div class="media-body">
+                    <h4><%= link_to user.name, user %></h4>
+                    <% if current_user?(user) %>
+                        <%= link_to "Update", user_path(user), class: 'btn btn-info' %>
+                    <% end %>
+                    <% if current_user.admin? && ! current_user?(user) %>
+                        <%= link_to "Delete", user_path(user), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger' %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>
+
+<div class="text-center border-top pt-3">
+    <%= will_paginate %>
+</div>

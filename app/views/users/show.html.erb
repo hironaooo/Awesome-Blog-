@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <%= gravatar_for @user %>
+
+                <h1><%= @user.name %></h1>
+                <%= @user.email %>
+                <% unless current_user?(@user) %>
+                    <div id="follow-form">
+                        <% if current_user.following?(@user) %>
+                            <%= render 'unfollow' %>
+                        <% else %>
+                            <%= render 'follow' %>
+                        <% end %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <%= form_for @post do |f| %>
+                <%= render 'shared/error_messages', object: f.object %>
+                    <div class="form-group">
+                        <%= hidden_field_tag :user_id, current_user.id %>
+                        <%= f.text_area :content, class: 'form-control', 
+                                            placeholder: 'Share your thoughts...' %>
+                         <%= f.file_field :picture %>
+                    </div>
+                    <div class="form-group">
+                        <%= f.submit "Post", class: 'btn btn-primary' %>
+                    </div>
+                <% end %>
+            </div>
+            <div class="card-body">
+                <% if @posts.any? %>
+                    <ul class="list-unstyled">
+                        <% @posts.each do |post| %>
+                            <li class="media mb-4">
+                                <div class="mr-2">
+                                    <%= link_to gravatar_for(post.user), post.user %>
+                                </div>
+                                <div class="media-body">
+                                    <h5><%= link_to post.user.name, post.user %></h5>
+                                    <div><%= post.content %></div>
+                                    <small class="text-muted">Postd <%= time_ago_in_words(post.created_at) %> ago</small>
+                                </div>
+                            </li>
+                        <% end %>
+                    </ul>
+                    <div class="text-center border-top pt-3">
+                        <%= will_paginate @posts %>
+                    </div>
+                <% else %>
+                    <div class="text-muted">Nothing to show.</div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
